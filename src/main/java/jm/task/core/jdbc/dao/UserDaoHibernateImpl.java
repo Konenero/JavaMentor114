@@ -2,6 +2,7 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 import java.sql.Connection;
@@ -17,32 +18,25 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        String myTableName = "CREATE TABLE users ("
+        Session session = Util.getSessionFactory();
+        session.beginTransaction();
+        int sql = session.createSQLQuery("CREATE TABLE users ("
                 + "id INT NOT NULL AUTO_INCREMENT,"
                 + " name VARCHAR(10),"
                 + "lastName VARCHAR(10),"
                 + " age INT,"
-                + " PRIMARY KEY(id));";
-        try {
-            Connection con = Util.setConnection();
-            Statement st = con.createStatement();
-            int res = st.executeUpdate(myTableName);
-            con.close();
-            st.close();
-        } catch (SQLException e) {
-        }
+                + " PRIMARY KEY(id));")
+                .executeUpdate();
+        session.getTransaction().commit();
     }
 
     @Override
     public void dropUsersTable() {
-        try {
-            Connection con = Util.setConnection();
-            Statement st = con.createStatement();
-            int res = st.executeUpdate("drop table users");
-            con.close();
-            st.close();
-        } catch (SQLException e) {
-        }
+        Session session = Util.getSessionFactory();
+        session.beginTransaction();
+        int sql = session.createSQLQuery("drop table users")
+                .executeUpdate();
+        session.getTransaction().commit();
     }
 
     @Override
