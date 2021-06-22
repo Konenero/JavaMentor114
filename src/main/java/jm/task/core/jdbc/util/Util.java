@@ -17,6 +17,8 @@ public class Util {
     private static String USER_NAME = "root";
     private static String PASSWORD = "root";
 
+    public static SessionFactory factory = Util.getSessionFactory();
+
     public static Connection setConnection() {
         Connection connection = null;
         try {
@@ -27,7 +29,7 @@ public class Util {
         return connection;
     }
 
-    public static Session getSessionFactory() {
+    public static SessionFactory getSessionFactory() {
         Properties settings = new Properties();
         settings.put(Environment.DRIVER, "com.mysql.jdbc.Driver");
         settings.put(Environment.URL, "jdbc:mysql://localhost:3306/java_mentor?useSSL=false");
@@ -45,8 +47,6 @@ public class Util {
                 .applySettings(configuration.getProperties())
                 .build();
 
-        SessionFactory factory = configuration.buildSessionFactory(serviceRegistry);
-
-        return factory.getCurrentSession();
+        return configuration.buildSessionFactory(serviceRegistry);
     }
 }

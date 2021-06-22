@@ -18,7 +18,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        Session session = Util.getSessionFactory();
+        Session session = Util.factory.getCurrentSession();
         session.beginTransaction();
         int sql = session.createSQLQuery("CREATE TABLE users ("
                 + "id INT NOT NULL AUTO_INCREMENT,"
@@ -32,7 +32,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
-        Session session = Util.getSessionFactory();
+        Session session = Util.factory.getCurrentSession();
         session.beginTransaction();
         int sql = session.createSQLQuery("drop table users")
                 .executeUpdate();
@@ -41,7 +41,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Session session = Util.getSessionFactory();
+        Session session = Util.factory.getCurrentSession();
         session.beginTransaction();
         session.save(new User(name, lastName, age));
         session.getTransaction().commit();
@@ -50,7 +50,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void removeUserById(long id) {
-        Session session = Util.getSessionFactory();
+        Session session = Util.factory.getCurrentSession();
         session.beginTransaction();
         session.createQuery(String.format("delete User where id = %s", id)).executeUpdate();
         session.getTransaction().commit();
@@ -58,7 +58,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        Session session = Util.getSessionFactory();
+        Session session = Util.factory.getCurrentSession();
         session.beginTransaction();
         List<User> list = session.createQuery("from User").list();
         session.getTransaction().commit();
@@ -68,7 +68,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void cleanUsersTable() {
-        Session session = Util.getSessionFactory();
+        Session session = Util.factory.getCurrentSession();
         session.beginTransaction();
         session.createQuery(String.format("delete User")).executeUpdate();
         session.getTransaction().commit();
